@@ -1,85 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ListProductsController!{% endblock %}
+{% block title %}Listado Productos Widitrade{% endblock %}
 
 {% block body %}
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-    .etiqueta {
-    border: 1px solid #ccc;
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 5px;
-    position: relative;
-    overflow: hidden;
-}
-
-.etiqueta-texto {
-    z-index: 1;
-    color: #666;
-}
-.puntuacion {
-    display: inline-block;
-    font-size: 18px;
-    color: #ffcc00; /* Color de las estrellas rellenas */
-}
-
-.puntuacion::before {
-    content: "★★★★★"; /* 10 estrellas en total */
-    letter-spacing: 3px;
-    color: #ccc; /* Color de las estrellas vacías */
-}
-
-/* Cambiar el color de las estrellas rellenas según la puntuación */
-.puntuacion[data-puntuacion="1"]::before { color: #ffcc00; }
-.puntuacion[data-puntuacion="2"]::before { color: #ffcc00; }
-.puntuacion[data-puntuacion="3"]::before { color: #ffcc00; }
-.puntuacion[data-puntuacion="4"]::before { color: #ffcc00; }
-.puntuacion[data-puntuacion="5"]::before { color: #ffcc00; }
-
-table {
-  border-collapse: collapse;
-}
-thead {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: center;
-}
-th{
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    background-color: #efecec;
-}
-td {
-    border: 1px solid #ccc;
     
-}
 
-.index{
-    border: 1px solid #ccc;
-    background-color: #efecec;
-    margin: -2px;
-    padding: 2px;
-    position: absolute;
-}
 </style>
 <script type="text/javascript">
-function toggle(obj) {
+function toggle(obj, index) {
           var obj=document.getElementById(obj);
-          if (obj.style.display == "block") obj.style.display = "none";
-          else obj.style.display = "block";
+          var dinamicRow = "row-info-"+index;
+          var dinamicLink = "link-" + index;
+          var link=document.getElementById(dinamicLink);          
+          var rowInfo=document.getElementsByClassName(dinamicRow);
+
+          if (obj.style.display == "block")
+          {
+            obj.style.display = "none";
+            link.innerHTML = "Mostrar más ";
+            rowInfo[0].style.border = "0px";
+          } else {
+            obj.style.display = "block";
+            link.innerHTML = "Mostrar menos ^";
+            rowInfo[0].style.borderLeft = "1px solid #ccc";
+            rowInfo[0].style.borderRight = "1px solid #ccc";
+          }
+
 }
 </script>
 <div class="example-wrapper">
 <header>
     <h1>Las 10 Mejores Barras de Sonido en España</h1>
-    <nav>
-        <ul>
-            <li><a href="/">Inicio</a></li>
-            <li><a href="/productos">Productos</a></li>
-        </ul>
-    </nav>
 </header>
 <main>
     <section>
@@ -96,54 +48,55 @@ function toggle(obj) {
             <tbody>
                 {% for item in datas_json %}
                     <tr>
-                        <td><span class="index">#{{ loop.index }}</span><img src="{{ item.Images.Primary.Large.URL }}" alt="{{ item.ItemInfo.Title.DisplayValue }}" height="{{ item.Images.Primary.Large.Height }}" Width="{{ item.Images.Primary.Large.Width }}"></td>
-                        <td><span class="puntuacion">8</span></td>
-                        <td>{{ item.ItemInfo.Title.DisplayValue|slice(0, 100) }}... 
+                        <td>
+                        {% if loop.index == 1 %}
+                            <h3 class="top-sales-1">#{{ loop.index }} MEJOR OPCION 2024</h3>
+                        {% elseif loop.index == 3 %}
+                            <h3 class="top-sales-3">#{{ loop.index }} MEJOR VALOR 2024</h3>
+                        {% else %}
+                            <span class="index">#{{ loop.index }}</span>
+                        {% endif %}
+                        
+                        <img src="{{ item.Images.Primary.Large.URL }}" alt="{{ item.ItemInfo.Title.DisplayValue }}" height="{{ item.Images.Primary.Large.Height }}" Width="{{ item.Images.Primary.Large.Width }}"></td>
+                        <td><span class="rating">8</span></td>
+                        <td class="product-name">{{ item.ItemInfo.Title.DisplayValue|slice(0, 120) }}... 
                         <div class="brand">
                             <span>{{ item.ItemInfo.ByLineInfo.Brand.DisplayValue }}</span>
                         </div>
-                        <div class="etiqueta">
-                            <span class="etiqueta-texto">{{ item.Offers.Listings[0].Price.Savings.Percentage }}% Descuento</span>
+                        <div class="tag">
+                            <span class="tag-text">{{ item.Offers.Listings[0].Price.Savings.Percentage }}% Descuento</span>
                         </div>
                         {% if item.Offers.Listings[0].DeliveryInfo.IsFreeShippingEligible == true %}
-                            <div class="etiqueta">
-                                <span class="etiqueta-texto">Envío gratis</span>
+                            <div class="tag">
+                                <span class="tag-text">Envío gratis</span>
                             </div>
                         {% endif %}
-                        <a href="javascript: void(0);" onClick="toggle('more-info')"> Más info </a>
+                        <div>
+                            <a href="javascript: void(0);" onClick="toggle('more-info-{{ loop.index }}', {{ loop.index }})" id="link-{{ loop.index }}">Mostrar más<i class="fa-solid fa-caret-down"></i></a>
+                        </div>
                         </td>
-                        <td><a href="{{ item.DetailPageURL }}" target="_blank"><button>Comprar ahora ></button></a>
+                        <td class="btn-logo"><a href="{{ item.DetailPageURL }}" target="_blank"><button class="btn-amazon">Comprar ahora ></button></a>
                         <div class="logo-amazon">
-                            <img src="/images/Amazon_logo.svg.png" alt="Comprar en amazon" height="80%" Width="80%">
+                            <img src="/images/Amazon_logo.svg.png" alt="Comprar en amazon" height="60%" Width="60%">
                         </div>
                         </td>
                         
                     </tr>
                     <tr>
-                    <td colspan="4">
-                    <div id="more-info" style="display:none;"> 
-                    <ul>
-                    {% for info in item.ItemInfo.Features.DisplayValues %}
-                    <li>{{ info }} </li>
-                    {% endfor %}
-                    </ul>
-                    </div>
-                    </td>
+                        <td colspan="4" class="row-info-{{ loop.index }}" style="border: 0px;">
+                            <div id="more-info-{{ loop.index }}" style="display: none;"> 
+                                <ul>
+                                    {% for info in item.ItemInfo.Features.DisplayValues %}
+                                    <li>{{ info }} </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
-
     </section
-    
-
 </main>
-        {# {% for item in datas_json %}
-                <p> {{  item.ItemInfo.Title.DisplayValue }}: </p>
-                <p> Orden de ventas: {{ item.BrowseNodeInfo.BrowseNodes[0].SalesRank}}
-
-        {% endfor %} #}
-       
-    
 </div>
 {% endblock %}
