@@ -25,6 +25,7 @@ function toggle(obj, index) {
             link.innerHTML = "Mostrar menos ^";
             rowInfo[0].style.borderLeft = "1px solid #ccc";
             rowInfo[0].style.borderRight = "1px solid #ccc";
+            rowInfo[0].style.borderBottom = "1px solid #ccc";
           }
 
 }
@@ -87,8 +88,15 @@ function toggle(obj, index) {
                             <div id="more-info-{{ loop.index }}" style="display: none;"> 
                                 <ul>
                                     {% for info in item.ItemInfo.Features.DisplayValues %}
-                                    <li>{{ info }} </li>
+                                    <li>{{ info }} 
+                                    
+                                    </li>
                                     {% endfor %}
+                                    <div class="logo-amazon-list">
+                                        <img src="/images/Amazon_logo.svg.png" alt="Comprar en amazon" >
+                                        
+                                    </div>
+                                    <a href="{{ item.DetailPageURL }}" target="_blank"><button class="btn-amazon-list">Comprar ahora ></button></a>
                                 </ul>
                             </div>
                         </td>

@@ -100,7 +100,7 @@ td {
     text-transform: uppercase;
     margin-top: 10px;
 }
-.btn-amazon{
+.btn-amazon, .btn-amazon-list{
     color: white;
     background: rgb(255, 151, 44);
     width: 140px;
@@ -111,9 +111,24 @@ td {
     appearance: button;
     border: 1px solid rgb(255, 151, 44);
 }
+.btn-amazon-list{
+    float: right;
+    margin-right: 55px;
+    margin-top: 15px;
+}
 .logo-amazon{
-    
     margin-left: 60px;
+}
+.logo-amazon-list{
+    float: right;
+    margin-right: 60px;
+    
+    
+}
+.logo-amazon-list img{
+    height:30%;
+    width:10%;
+    float: right;
 }
 .btn-log{
     width:200px !important;
